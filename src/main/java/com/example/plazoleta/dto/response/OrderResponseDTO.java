@@ -4,14 +4,14 @@ import java.util.List;
 
 public class OrderResponseDTO {
 
-    private List<OrderResponseDTO> menus;
+    private List<MenuResponseDTO> menus;
     private String status;
 
-    public List<OrderResponseDTO> getMenus() {
+    public List<MenuResponseDTO> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<OrderResponseDTO> menus) {
+    public void setMenus(List<MenuResponseDTO> menus) {
         this.menus = menus;
     }
 

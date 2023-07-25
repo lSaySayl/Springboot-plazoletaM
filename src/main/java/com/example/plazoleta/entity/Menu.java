@@ -3,7 +3,7 @@ package com.example.plazoleta.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menu_entity")
 public class Menu {
 
     @Id
@@ -35,7 +35,7 @@ public class Menu {
     private double preparationTime;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="order", nullable = false)
+    @JoinColumn(name="id_order", nullable = false)
     private Order order;
 
     //Constructor vacío
