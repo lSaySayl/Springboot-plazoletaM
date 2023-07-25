@@ -35,7 +35,7 @@ public class Menu {
     private double preparationTime;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="id_order", nullable = false)
+    @JoinColumn(name="idOrder", nullable = false)
     private Order order;
 
     //Constructor vacío
