@@ -34,6 +34,10 @@ public class Menu {
 
     private double preparationTime;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name="order", nullable = false)
+    private Order order;
+
     //Constructor vacío
 
     public Menu() {
@@ -42,7 +46,7 @@ public class Menu {
 
     //Constructor con parámetros
 
-    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, boolean status, String site, double preparationTime) {
+    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, boolean status, String site, double preparationTime, Order order) {
         this.id = id;
         this.rol = rol;
         this.name = name;
@@ -53,6 +57,7 @@ public class Menu {
         this.status = status;
         this.site = site;
         this.preparationTime = preparationTime;
+        this.order = order;
     }
 
 

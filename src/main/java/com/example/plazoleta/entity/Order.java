@@ -5,20 +5,23 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="order")
+@Table(name = "order")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idOrder;
 
-    @Column
+    @Column(name = "rol", nullable = false)
     private char rol;
 
+   @OneToMany(mappedBy = "order")
     private List<Menu> menus;
 
+    @Column(name="site",nullable = false)
     private String site;
 
+    @Column(name="status",nullable = false)
     private String status;
 
     //consttructor vacío
@@ -29,8 +32,8 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long id, char rol, List<Menu> menus, String site, String status) {
-        this.id = id;
+    public Order(Long idOrder, char rol, List<Menu> menus, String site, String status) {
+        this.idOrder = idOrder;
         this.rol = rol;
         this.menus = menus;
         this.site = site;
@@ -41,12 +44,12 @@ public class Order {
     //getters y setters
 
 
-    public Long getId() {
-        return id;
+    public Long getIdOrder() {
+        return idOrder;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdOrder(Long idOrder) {
+        this.idOrder = idOrder;
     }
 
     public char getRol() {
