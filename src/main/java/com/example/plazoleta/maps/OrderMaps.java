@@ -18,5 +18,5 @@ public interface OrderMaps {
 
     public OrderResponseDTO toOrderResponseDto(Order order);
 
-    public List<OrderResponseDTO> toOrderResponseDto(List<Order> orders);
+    public List<OrderResponseDTO> toOrderResponseDtos(List<Order> orders);
 }

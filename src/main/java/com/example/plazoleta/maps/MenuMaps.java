@@ -22,6 +22,6 @@ public interface MenuMaps {
 
     public MenuResponseDTO toMenuResponseDto(Menu menu);
 
-    public List <MenuResponseDTO> toMenuResponseDto(List<Menu> menus);
+    public List <MenuResponseDTO> toMenuResponseDtos(List<Menu> menus);
 
 }
