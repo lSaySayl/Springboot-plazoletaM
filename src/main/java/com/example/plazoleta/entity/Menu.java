@@ -36,9 +36,9 @@ public class Menu {
     @Column(name = "preparationTime", nullable = false)
     private double preparationTime;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name="idOrder", nullable = false)
-    private Order order;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name="idOrder", nullable = false)
+//    private Order order;
 
     //Constructor vacío
 
@@ -59,7 +59,7 @@ public class Menu {
         this.status = true;
         this.site = site;
         this.preparationTime = preparationTime;
-        this.order = order;
+//        this.order = order;
     }
 
 

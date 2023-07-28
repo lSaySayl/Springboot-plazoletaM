@@ -15,14 +15,15 @@ public class Order {
     @Column(name = "rol", nullable = false)
     private char rol;
 
-   @OneToMany(mappedBy = "order")
-    private List<Menu> menus;
-
     @Column(name="site",nullable = false)
     private String site;
 
     @Column(name="status",nullable = false)
     private String status;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderId")
+    private List<OrderDetail> details;
 
     //consttructor vacío
 
@@ -32,12 +33,12 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long idOrder, char rol, List<Menu> menus, String site, String status) {
+    public Order(Long idOrder, char rol, String site, String status, List<OrderDetail> details) {
         this.idOrder = idOrder;
         this.rol = rol;
-        this.menus = menus;
         this.site = site;
         this.status = status;
+        this.details = details;
     }
 
 
@@ -60,14 +61,6 @@ public class Order {
         this.rol = rol;
     }
 
-    public List<Menu> getMenus() {
-        return menus;
-    }
-
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
-    }
-
     public String getSite() {
         return site;
     }
@@ -82,5 +75,13 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<OrderDetail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<OrderDetail> details) {
+        this.details = details;
     }
 }
