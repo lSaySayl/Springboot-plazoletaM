@@ -11,7 +11,7 @@ public class Menu {
     private Long id;
 
     @Column(name = "rol" , nullable = false)
-    private  char rol;
+    private Character rol;
 
     @Column(name = "name" , nullable = false)
     private String name;
@@ -28,10 +28,12 @@ public class Menu {
     @Column(name = "category" , nullable = false)
     private String category;
 
+    @Column(name = "status", nullable = false)
     private boolean status;
 
+    @Column(name = "site", nullable = false)
     private String site;
-
+    @Column(name = "preparationTime", nullable = false)
     private double preparationTime;
 
     @ManyToOne(optional = false)
@@ -46,7 +48,7 @@ public class Menu {
 
     //Constructor con parámetros
 
-    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, boolean status, String site, double preparationTime, Order order) {
+    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, String site, double preparationTime, Order order) {
         this.id = id;
         this.rol = rol;
         this.name = name;
@@ -54,7 +56,7 @@ public class Menu {
         this.description = description;
         this.url = url;
         this.category = category;
-        this.status = status;
+        this.status = true;
         this.site = site;
         this.preparationTime = preparationTime;
         this.order = order;
@@ -72,11 +74,11 @@ public class Menu {
         this.id = id;
     }
 
-    public char getRol() {
+    public Character getRol() {
         return rol;
     }
 
-    public void setRol(char rol) {
+    public void setRol(Character rol) {
         this.rol = rol;
     }
 
@@ -120,7 +122,7 @@ public class Menu {
         this.category = category;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
