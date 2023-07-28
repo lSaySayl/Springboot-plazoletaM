@@ -20,7 +20,6 @@ public class MenuService {
     MenuValidation validate;
     @Autowired
     RepositoryMenu repositoryMenu;
-
     @Autowired
     MenuMaps menuMap;
     public MenuResponseDTO createMenu(Menu dataMenu) throws Exception{
@@ -57,11 +56,47 @@ public class MenuService {
         try{
             Pageable pagerList = PageRequest.of(0, numberOfRecords);
             Page<Menu> menuPagerList = repositoryMenu.findByCategoryAndSite(category, site, pagerList);
-            return null;
+            return menuPagerList.map(menu -> menuMap.toMenuResponseDto(menu));
 
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }
     }
+    public MenuResponseDTO updateMenu (Long id, Menu dataNewMenu) throws Exception {
+        //Hacemos nuestras validaciones
+        try {
+            if (!dataNewMenu.getRol().equals('A')) {
+                throw new Exception("No tienes permisos para actualizar un plato");
+            }
+            //Validamos si el plato existe en nuestra base de datos
+            Optional<Menu> dishOptional = repositoryMenu.findById(id);
 
+            if (dishOptional.isPresent()) {
+                // El plato existe, traemos nuestro plato
+                Menu menuFound = dishOptional.get();
+
+                // Actualizar solo los campos que recibimos como parámetros
+                if (dataNewMenu.getPrice() != null) {
+                    menuFound.setPrice(dataNewMenu.getPrice());
+                }
+                if (dataNewMenu.getSite() != null) {
+                    menuFound.setSite(dataNewMenu.getSite());
+                }
+                if (dataNewMenu.getDescription() != null) {
+                    menuFound.setDescription(dataNewMenu.getDescription());
+                }
+                // Guardar el plato actualizado en la base de datos
+                Menu menuUpdated = repositoryMenu.save(menuFound);
+
+                return menuMap.toMenuResponseDto(menuUpdated);
+            } else {
+                throw new Exception("El plato no existe");
+            }
+
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+
+        }
+
+    }
 }

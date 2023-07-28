@@ -1,6 +1,8 @@
 package com.example.plazoleta.dto.response;
 
-public class MenuResponseDTO {
+import com.example.plazoleta.dto.general.MenuDTO;
+
+public class MenuResponseDTO extends MenuDTO {
     private String name;
     private Integer price;
 
