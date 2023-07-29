@@ -29,7 +29,7 @@ public class Menu {
     private String category;
 
     @Column(name = "status", nullable = false)
-    private boolean status;
+    private boolean status = true;
 
     @Column(name = "site", nullable = false)
     private String site;
@@ -48,7 +48,7 @@ public class Menu {
 
     //Constructor con parámetros
 
-    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, String site, double preparationTime, Order order) {
+    public Menu(Long id, char rol, String name, Integer price, String description, String url, String category, String site, double preparationTime, boolean status) {
         this.id = id;
         this.rol = rol;
         this.name = name;
@@ -56,7 +56,7 @@ public class Menu {
         this.description = description;
         this.url = url;
         this.category = category;
-        this.status = true;
+        this.status = status;
         this.site = site;
         this.preparationTime = preparationTime;
 //        this.order = order;

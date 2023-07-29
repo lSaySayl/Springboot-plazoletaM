@@ -15,6 +15,9 @@ public class Order {
     @Column(name = "rol", nullable = false)
     private char rol;
 
+    @Column(name = "approvalRol", nullable = false)
+    private Character approvalRol;
+
     @Column(name="site",nullable = false)
     private String site;
 
@@ -83,5 +86,13 @@ public class Order {
 
     public void setDetails(List<OrderDetail> details) {
         this.details = details;
+    }
+
+    public Character getApprovalRol() {
+        return approvalRol;
+    }
+
+    public void setApprovalRol(Character approvalRol) {
+        this.approvalRol = approvalRol;
     }
 }

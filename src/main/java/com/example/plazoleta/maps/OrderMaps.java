@@ -9,9 +9,9 @@ import org.mapstruct.Mappings;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface    OrderMaps {
+public interface OrderMaps {
     @Mappings({
-            @Mapping(source="menus",target = "menus"),
+//            @Mapping(source="menus",target = "menus"),
             @Mapping(source="status",target = "status")
 
     })
