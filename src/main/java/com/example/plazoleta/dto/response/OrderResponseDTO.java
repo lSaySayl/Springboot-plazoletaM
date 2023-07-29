@@ -1,8 +1,10 @@
 package com.example.plazoleta.dto.response;
 
+import com.example.plazoleta.dto.general.OrderDTO;
+
 import java.util.List;
 
-public class OrderResponseDTO {
+public class OrderResponseDTO extends OrderDTO {
 
     private List<MenuResponseDTO> menus;
     private String status;
