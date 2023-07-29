@@ -1,20 +1,39 @@
 package com.example.plazoleta.dto.response;
 
 import com.example.plazoleta.dto.general.OrderDTO;
+import com.example.plazoleta.dto.general.OrderDetailDTO;
 
 import java.util.List;
 
 public class OrderResponseDTO extends OrderDTO {
+    private Long idOrder;
+    private String site;
 
-    private List<MenuResponseDTO> menus;
+    private List<OrderDetailDTO> details;
     private String status;
 
-    public List<MenuResponseDTO> getMenus() {
-        return menus;
+    public Long getIdOrder() {
+        return idOrder;
     }
 
-    public void setMenus(List<MenuResponseDTO> menus) {
-        this.menus = menus;
+    public void setIdOrder(Long idOrder) {
+        this.idOrder = idOrder;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public List<OrderDetailDTO> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<OrderDetailDTO> details) {
+        this.details = details;
     }
 
     public String getStatus() {
