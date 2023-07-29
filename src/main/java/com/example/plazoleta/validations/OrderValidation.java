@@ -1,4 +1,5 @@
 package com.example.plazoleta.validations;
+import com.example.plazoleta.entity.Order;
 
 import org.springframework.stereotype.Component;
 
@@ -13,4 +14,9 @@ public class OrderValidation {
             return false;
         }
     }
+    public static Boolean validateRequired(Order order){
+        return  order.getSite() == null || order.getSite().isEmpty() ||
+                order.getDetails() == null || order.getDetails().isEmpty();
+    }
 }
+

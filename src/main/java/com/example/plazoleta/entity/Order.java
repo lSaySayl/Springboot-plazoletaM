@@ -13,7 +13,7 @@ public class Order {
     private Long idOrder;
 
     @Column(name = "rol", nullable = false)
-    private char rol;
+    private Character rol;
 
     @Column(name = "approvalRol", nullable = false)
     private Character approvalRol;
@@ -22,13 +22,13 @@ public class Order {
     private String site;
 
     @Column(name="status",nullable = false)
-    private String status;
+    private String status = "Pendiente";
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private List<OrderDetail> details;
 
-    //consttructor vacío
+    //constructor vacío
 
     public Order() {
     }
@@ -36,7 +36,7 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long idOrder, char rol, String site, String status, List<OrderDetail> details) {
+    public Order(Long idOrder, Character rol, String site, String status, List<OrderDetail> details) {
         this.idOrder = idOrder;
         this.rol = rol;
         this.site = site;
@@ -56,11 +56,11 @@ public class Order {
         this.idOrder = idOrder;
     }
 
-    public char getRol() {
+    public Character getRol() {
         return rol;
     }
 
-    public void setRol(char rol) {
+    public void setRol(Character rol) {
         this.rol = rol;
     }
 
