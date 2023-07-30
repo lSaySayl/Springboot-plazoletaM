@@ -1,9 +1,13 @@
 package com.example.plazoleta.dto.response;
 
-public class ClaimResponseDTO {
+import com.example.plazoleta.dto.general.ClaimDTO;
+
+public class ClaimResponseDTO extends ClaimDTO {
     private Long id;
     private String status;
     private String reason;
+
+    private String response;
 
     public Long getId() {
         return id;
@@ -27,5 +31,13 @@ public class ClaimResponseDTO {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 }
