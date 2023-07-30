@@ -14,7 +14,8 @@ public interface ClaimMaps {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "status", target = "status"),
-            @Mapping(source = "reason", target = "reason")
+            @Mapping(source = "reason", target = "reason"),
+            @Mapping(source = "response", target = "response")
     })
     public ClaimResponseDTO toClaimResponseDTO(Claim claim);
     public List<ClaimResponseDTO> toClaimResponseDTOs(List<Claim> claims);

@@ -28,6 +28,9 @@ public class Order {
     @JoinColumn(name = "orderId")
     private List<OrderDetail> details;
 
+    @OneToOne(mappedBy = "order")
+    private Claim claim;
+
     //constructor vacío
 
     public Order() {
