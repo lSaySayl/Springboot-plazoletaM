@@ -34,7 +34,6 @@ public class OrderService {
 
     @Autowired
     RepositoryOrder repositoryOrder;
-
     @Autowired
     OrderMaps orderMaps;
     @Autowired
@@ -44,25 +43,25 @@ public class OrderService {
     RepositoryMenu repositoryMenu;
 
 
-    public OrderResponseDTO updateStatusOrder(Long idOrder, Order dataOrder) throws Exception {
-        try {
-            if (!dataOrder.getApprovalRol().equals('A')) {
-                throw new Exception("No tiene permisos para cambiar el estado a este pedido");
-            }
-            Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
-            if (orderValidation.validateIsIdIsPresent(orderOptional)) {
-                throw new Exception("El pedido no existe");
-            }
-            Order orderExist = orderOptional.get();
-            if (orderExist.getStatus() != ("Listo") && dataOrder.getStatus() != ("Entregado")) {
-                throw new Exception("Solamente puede actualizar el estado del pedido a entregado cuando se encuentre listo");
-            }
-            orderExist.setStatus(dataOrder.getStatus());
-            return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
+//    public OrderResponseDTO updateStatusOrder(Long idOrder, Order dataOrder) throws Exception {
+//        try {
+//            if (!dataOrder.getApprovalRol().equals('A')) {
+//                throw new Exception("No tiene permisos para cambiar el estado a este pedido");
+//            }
+//            Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
+//            if (orderValidation.validateIsIdIsPresent(orderOptional)) {
+//                throw new Exception("El pedido no existe");
+//            }
+//            Order orderExist = orderOptional.get();
+//            if (orderExist.getStatus() != ("Listo") && dataOrder.getStatus() != ("Entregado")) {
+//                throw new Exception("Solamente puede actualizar el estado del pedido a entregado cuando se encuentre listo");
+//            }
+//            orderExist.setStatus(dataOrder.getStatus());
+//            return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
+//        } catch (Exception e) {
+//            throw new Exception(e.getMessage());
+//        }
+//    }
 
 
 
