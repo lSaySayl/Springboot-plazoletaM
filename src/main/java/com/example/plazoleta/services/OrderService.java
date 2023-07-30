@@ -1,6 +1,5 @@
 package com.example.plazoleta.services;
 
-import com.example.plazoleta.dto.response.MenuResponseDTO;
 import com.example.plazoleta.dto.response.OrderResponseDTO;
 import com.example.plazoleta.entity.Menu;
 import com.example.plazoleta.entity.Order;
@@ -48,7 +47,7 @@ public class OrderService {
         }
 
     }
-    public Page<OrderResponseDTO> getOrderForStatusAndSite(Character rol, String side, String status, int numberOfRecords) throws Exception{
+    public Page<OrderResponseDTO> getOrderForStatusAndSite(String side, String status, int numberOfRecords) throws Exception{
         try{
             Pageable pagerList = PageRequest.of(0, numberOfRecords);
             Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
@@ -58,18 +57,21 @@ public class OrderService {
             throw new Exception(e.getMessage());
         }
     }
-    public OrderResponseDTO updateOrder(Long idOrder, Order dataOrder) throws Exception{
+    public OrderResponseDTO updateOrderPreparation(Long idOrder, Order dataOrder) throws Exception{
         try{
             if(dataOrder.getRol()!=('A')){
-                throw new Exception("El rol no esta autorizado para crear un pedido");
+                throw new Exception("El rol no esta autorizado para actualizar el pedido");
             }
             Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
             if (orderOptional.isEmpty()) {
                 throw new Exception("No existe el pedido");
             }
             Order orderExist = orderOptional.get();
-            orderExist.setStatus("Preparacion");
+            if (dataOrder.getStatus()!=("Preparacion"))
+                throw new Exception("El estado no puede ser diferente de preparación");
+            orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
+
 
         }catch (Exception error){
             throw new Exception(error.getMessage());
