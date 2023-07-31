@@ -88,7 +88,9 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
                 throw new Exception("No existe el pedido");
             }
             Order orderExist = orderOptional.get();
+
             if (!dataOrder.getStatus().equals ("Preparacion"))
+
                 throw new Exception("El estado no puede ser diferente de preparación");
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
@@ -99,6 +101,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         }
     }
+
     public OrderResponseDTO updateOrderReady(Long idOrder, Order dataOrder) throws  Exception {
         try {
             if (dataOrder.getRol() != ('A')) {
@@ -117,6 +120,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         }
 
     }
+
 
         public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status,
   int numberOfRecords) throws Exception {
@@ -167,6 +171,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         if (orderOptional.isEmpty()) {
             throw new Exception("No existe un pedido, por lo tanto no se puede actualizar el estado");
         }
+
 
         Order orderExist = orderOptional.get();
 
