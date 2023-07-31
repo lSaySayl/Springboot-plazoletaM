@@ -170,7 +170,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         Order orderExist = orderOptional.get();
 
-        if (orderExist.getStatus() != ("Listo") && dataOrder.getStatus() != ("Entregado")) {
+        if (orderExist.getStatus() != ("Listo") && !dataOrder.getStatus().equals("Entregado")) {
             throw new Exception("El pedido no se puede entregar en esta instancia");
         }
 
@@ -201,6 +201,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
     public List<OrderResponseDTO> getOrderPending () {
         return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
+    }
+
+    public List<OrderResponseDTO> getOrderPreparation () {
+        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Preparacion"));
     }
 
 }
