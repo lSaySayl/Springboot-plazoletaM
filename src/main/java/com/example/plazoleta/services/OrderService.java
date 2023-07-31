@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -129,5 +130,77 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             }
         }
 
-  
+
+    public OrderResponseDTO updateOrderCanceled (Long idOrder, Order dataOrder) throws Exception  {
+        try {
+            if (dataOrder.getRol() != ('A')) {
+                throw new Exception("El rol no esta autorizado para actualizar el estado del pedido");
+            }
+            Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
+            if (orderOptional.isEmpty()) {
+                throw new Exception("No existe un pedido, por lo tanto no se puede actualizar el estado");
+            }
+
+            Order orderExist = orderOptional.get();
+
+            if (orderExist.getStatus() == ("Preparacion") || dataOrder.getStatus() == ("Listo") || dataOrder.getStatus() == ("Entregado")) {
+                throw new Exception("El pedido no se puede cancelar en esta instancia");
+            }
+
+            orderExist.setStatus(dataOrder.getStatus());
+            return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
+
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+
         }
+    }
+
+
+    public OrderResponseDTO updateOrderDelivered (Long idOrder, Order dataOrder) throws Exception {
+    try
+    {
+        if (dataOrder.getRol() != ('A')) {
+            throw new Exception("El rol no esta autorizado para actualizar el estado del pedido");
+        }
+        Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
+        if (orderOptional.isEmpty()) {
+            throw new Exception("No existe un pedido, por lo tanto no se puede actualizar el estado");
+        }
+
+        Order orderExist = orderOptional.get();
+
+        if (orderExist.getStatus() != ("Listo") && dataOrder.getStatus() != ("Entregado")) {
+            throw new Exception("El pedido no se puede entregar en esta instancia");
+        }
+
+
+        orderExist.setStatus(dataOrder.getStatus());
+        return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
+
+    } catch (Exception error) {
+        throw new Exception(error.getMessage());
+    }
+
+    }
+
+
+
+    //Preparación, Listo, Entregado, Cancelado, Pendiente
+    public List<OrderResponseDTO> getOrderReady () {
+        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Listo"));
+    }
+
+    public List<OrderResponseDTO> getOrderDelivered () {
+        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Entregado"));
+    }
+
+    public List<OrderResponseDTO> getOrderCanceled () {
+    return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Cancelado"));
+    }
+
+    public List<OrderResponseDTO> getOrderPending () {
+        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
+    }
+
+}
