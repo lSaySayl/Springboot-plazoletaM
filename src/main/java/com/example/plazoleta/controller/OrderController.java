@@ -4,6 +4,7 @@ import com.example.plazoleta.dto.error.MenuErrorDTO;
 import com.example.plazoleta.dto.error.OrderErrorDTO;
 import com.example.plazoleta.dto.general.MenuDTO;
 import com.example.plazoleta.dto.general.OrderDTO;
+import com.example.plazoleta.dto.response.ClaimResponseDTO;
 import com.example.plazoleta.dto.response.MenuResponseDTO;
 import com.example.plazoleta.dto.response.OrderResponseDTO;
 import com.example.plazoleta.entity.Menu;
@@ -44,7 +45,16 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
-
+    @PutMapping("/updateOrderReady/{id}")
+    public ResponseEntity<OrderDTO> updateOrderReady(@PathVariable long id, @RequestBody Order order){
+      try {
+          return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderReady(id, order));
+      }catch (Exception e){
+          OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+          orderErrorDTO.setMessage(e.getMessage());
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
+      }
+    }
     @GetMapping
     public ResponseEntity <List<OrderResponseDTO>> getPaginatedAndFilterOrder (
             @RequestParam () String site,
@@ -64,4 +74,84 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+    @PutMapping("/updateOrderCanceled/{id}")
+    public ResponseEntity<OrderDTO> updateOrderCanceled(@PathVariable Long id, @RequestBody Order order){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderCanceled(id, order));
+        }catch (Exception e){
+            OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+            orderErrorDTO.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
+        }
+    }
+
+
+    @PutMapping("/updateOrderDelivered/{id}")
+    public ResponseEntity<OrderDTO> updateOrderDelivered (@PathVariable Long id, @RequestBody Order order){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderDelivered(id, order));
+        }catch (Exception e){
+            OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+            orderErrorDTO.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
+        }
+    }
+
+
+
+    @GetMapping("/getOrderReady")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+    }
+
+    @GetMapping("/getOrderDelivered")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @GetMapping("/getOrderCanceled")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderCanceled () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCanceled());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+    }
+
+    @GetMapping("/getOrderPending")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderPending () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPending());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+    }
+
+    @GetMapping("getOrderPreparation")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 }
