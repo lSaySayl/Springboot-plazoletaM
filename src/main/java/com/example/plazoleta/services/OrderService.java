@@ -75,9 +75,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
     } catch (Exception error) {
         throw new Exception(error.getMessage());
     }
-    public OrderResponseDTO updateOrderPreparation(Long idOrder, Order dataOrder) throws Exception{
-        try{
-            if(dataOrder.getRol()!=('A')){
+}
+    public OrderResponseDTO updateOrderPreparation(Long idOrder, Order dataOrder) throws Exception {
+        try {
+            if (dataOrder.getRol() != ('A')) {
                 throw new Exception("El rol no esta autorizado para actualizar el pedido");
             }
             Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
@@ -85,17 +86,18 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
                 throw new Exception("No existe el pedido");
             }
             Order orderExist = orderOptional.get();
-            if (dataOrder.getStatus()!=("Preparacion"))
+            if (dataOrder.getStatus() != ("Preparacion"))
                 throw new Exception("El estado no puede ser diferente de preparación");
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
 
 
-        }catch (Exception error){
+        } catch (Exception error) {
             throw new Exception(error.getMessage());
 
-}
-        public Page<OrderResponseDTO> getOrderForStatusAndSite (Character rol, String side, String status,
+        }
+    }
+        public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status,
   int numberOfRecords) throws Exception {
             try {
                 Pageable pagerList = PageRequest.of(0, numberOfRecords);
@@ -110,4 +112,3 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
   
         }
 
-}
