@@ -144,4 +144,14 @@ public class OrderController {
 
     }
 
+    @GetMapping("getOrderPreparation")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 }
