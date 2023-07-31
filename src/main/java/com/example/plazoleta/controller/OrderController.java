@@ -44,7 +44,16 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
-
+    @PutMapping("/updateOrderReady/{id}")
+    public ResponseEntity<OrderDTO> updateOrderReady(@PathVariable long id, @RequestBody Order order){
+      try {
+          return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderReady(id, order));
+      }catch (Exception e){
+          OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+          orderErrorDTO.setMessage(e.getMessage());
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
+      }
+    }
     @GetMapping
     public ResponseEntity <List<OrderResponseDTO>> getPaginatedAndFilterOrder (
             @RequestParam () String site,

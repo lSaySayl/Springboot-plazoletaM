@@ -9,6 +9,7 @@ import com.example.plazoleta.validations.OrderValidation;
 import com.example.plazoleta.repository.RepositoryMenu;
 import com.example.plazoleta.repository.RepositoryOrder;
 import com.example.plazoleta.validations.OrderValidation;
+import jakarta.websocket.EncodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -86,7 +87,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
                 throw new Exception("No existe el pedido");
             }
             Order orderExist = orderOptional.get();
-            if (dataOrder.getStatus() != ("Preparacion"))
+            if (!dataOrder.getStatus().equals ("Preparacion"))
                 throw new Exception("El estado no puede ser diferente de preparación");
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
@@ -97,6 +98,25 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         }
     }
+    public OrderResponseDTO updateOrderReady(Long idOrder, Order dataOrder) throws  Exception {
+        try {
+            if (dataOrder.getRol() != ('A')) {
+                throw new Exception("El rol no esta autorizado para actualizar el pedido");
+            }
+            Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
+            if (orderOptional.isEmpty()) {
+                throw new Exception("No existe el pedido");
+            } Order orderExist = orderOptional.get();
+            if (!dataOrder.getStatus().equals("Listo")&& orderExist.getStatus().equals("Preparacion"))
+                throw new Exception("El estado no puede ser diferente de Listo");
+            orderExist.setStatus(dataOrder.getStatus());
+            return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
+        }catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+
+    }
+
         public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status,
   int numberOfRecords) throws Exception {
             try {
