@@ -31,6 +31,8 @@ public class Order {
     @OneToOne(mappedBy = "order")
     private Claim claim;
 
+    private double timeOrder;
+
     //constructor vacío
 
     public Order() {
@@ -39,12 +41,15 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long idOrder, Character rol, String site, String status, List<OrderDetail> details) {
+    public Order(Long idOrder, Character rol, Character approvalRol, String site, String status, List<OrderDetail> details, Claim claim, double timeOrder) {
         this.idOrder = idOrder;
         this.rol = rol;
+        this.approvalRol = approvalRol;
         this.site = site;
         this.status = status;
         this.details = details;
+        this.claim = claim;
+        this.timeOrder = timeOrder;
     }
 
 
@@ -97,5 +102,21 @@ public class Order {
 
     public void setApprovalRol(Character approvalRol) {
         this.approvalRol = approvalRol;
+    }
+
+    public Claim getClaim() {
+        return claim;
+    }
+
+    public void setClaim(Claim claim) {
+        this.claim = claim;
+    }
+
+    public double getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(double timeOrder) {
+        this.timeOrder = timeOrder;
     }
 }
