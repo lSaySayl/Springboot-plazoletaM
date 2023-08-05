@@ -111,7 +111,7 @@ class MenuServiceTest {
     }
 
     @Test
-    void getMenusForCategoryAndSiteWithErro(){
+    void getMenusForCategoryAndSiteWithError(){
         int numberOfRecords = 0;
         assertThrows(Exception.class,()->menuService.getMenusForCategoryAndSite(menu.getCategory(), menu.getSite(), numberOfRecords));
     }

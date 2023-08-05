@@ -37,9 +37,9 @@ public class OrderController {
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody Order dataOrder) {
-        try{
+        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(orderService.createOrder(dataOrder));
-        }catch (Exception e){
+        } catch (Exception e) {
             OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
             orderErrorDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
@@ -50,10 +50,10 @@ public class OrderController {
     @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PutMapping("/updateOrder/{id}")
-    public ResponseEntity<OrderDTO> updatedOrder(@PathVariable Long id, @RequestBody Order order){
-        try{
+    public ResponseEntity<OrderDTO> updatedOrder(@PathVariable Long id, @RequestBody Order order) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderPreparation(id, order));
-        }catch (Exception e){
+        } catch (Exception e) {
             OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
             orderErrorDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
@@ -64,20 +64,21 @@ public class OrderController {
     @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PutMapping("/updateOrderReady/{id}")
-    public ResponseEntity<OrderDTO> updateOrderReady(@PathVariable long id, @RequestBody Order order){
-      try {
-          return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderReady(id, order));
-      }catch (Exception e){
-          OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
-          orderErrorDTO.setMessage(e.getMessage());
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
-      }
+    public ResponseEntity<OrderDTO> updateOrderReady(@PathVariable long id, @RequestBody Order order) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderReady(id, order));
+        } catch (Exception e) {
+            OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
+            orderErrorDTO.setMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
+        }
     }
+
     @GetMapping
-    public ResponseEntity <List<OrderResponseDTO>> getPaginatedAndFilterOrder (
-            @RequestParam () String site,
-            @RequestParam () String status,
-            @RequestParam () int numberOfRecords
+    public ResponseEntity<List<OrderResponseDTO>> getPaginatedAndFilterOrder(
+            @RequestParam() String site,
+            @RequestParam() String status,
+            @RequestParam() int numberOfRecords
     ) {
         try {
             // Llamamos al servicio para obtener la respuesta paginada
@@ -98,10 +99,10 @@ public class OrderController {
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
     @PutMapping("/updateOrderCanceled/{id}")
-    public ResponseEntity<OrderDTO> updateOrderCanceled(@PathVariable Long id, @RequestBody Order order){
-        try{
+    public ResponseEntity<OrderDTO> updateOrderCanceled(@PathVariable Long id, @RequestBody Order order) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderCanceled(id, order));
-        }catch (Exception e){
+        } catch (Exception e) {
             OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
             orderErrorDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
@@ -114,73 +115,108 @@ public class OrderController {
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
     @PutMapping("/updateOrderDelivered/{id}")
-    public ResponseEntity<OrderDTO> updateOrderDelivered (@PathVariable Long id, @RequestBody Order order){
-        try{
+    public ResponseEntity<OrderDTO> updateOrderDelivered(@PathVariable Long id, @RequestBody Order order) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrderDelivered(id, order));
-        }catch (Exception e){
+        } catch (Exception e) {
             OrderErrorDTO orderErrorDTO = new OrderErrorDTO();
             orderErrorDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
 
-
-    @Operation(summary = "Get orders that are ready")
-    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
-    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
-
-    @GetMapping("/getOrderReady")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+    //<<<<<<< HEAD
+    @GetMapping("/getForStatus")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderForStatus(@RequestParam() String status, @RequestParam() int numberOfRecords) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-    }
-
-
-    @GetMapping("/getOrderDelivered")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
-
+            Page<OrderResponseDTO> orderPages = orderService.getOrderForStatus(status, numberOfRecords);
+            List<OrderResponseDTO> orderList = orderPages.getContent();
+            return ResponseEntity.status(HttpStatus.OK).body(orderList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
-    @GetMapping("/getOrderCanceled")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderCanceled () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCanceled());
+//=======
+//
+//    @Operation(summary = "Get orders that are ready")
+//    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
+//    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+//    @GetMapping("/getOrderReady")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
 
+
+//    @GetMapping("/getOrderDelivered")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
+//
+//        } catch (Exception e) {
+//
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//    }
+
+
+//    @GetMapping("/getOrderReady")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("/getOrderDelivered")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//    }
+//
+//    @GetMapping("/getOrderCanceled")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderCanceled () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCanceled());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("/getOrderPending")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderPending () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPending());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("getOrderPreparation")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//    }
     }
-
-    @GetMapping("/getOrderPending")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderPending () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPending());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-    }
-
-    @GetMapping("getOrderPreparation")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-    }
-
-}

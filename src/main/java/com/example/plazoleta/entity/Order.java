@@ -109,14 +109,6 @@ public class Order {
         this.details = details;
     }
 
-    public Claim getClaim() {
-        return claim;
-    }
-
-    public void setClaim(Claim claim) {
-        this.claim = claim;
-    }
-
     public String getReasonForCancellation() {
         return reasonForCancellation;
     }
