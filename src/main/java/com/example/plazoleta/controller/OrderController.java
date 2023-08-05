@@ -99,59 +99,71 @@ public class OrderController {
         }
     }
 
-
-
-    @GetMapping("/getOrderReady")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+    @GetMapping("/getForStatus")
+    public ResponseEntity<List<OrderResponseDTO>> getOrderForStatus(@RequestParam () String status, @RequestParam () int numberOfRecords){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-    }
-
-    @GetMapping("/getOrderDelivered")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
-
-        } catch (Exception e) {
+            Page<OrderResponseDTO> orderPages = orderService.getOrderForStatus(status,numberOfRecords);
+            List<OrderResponseDTO> orderList = orderPages.getContent();
+            return ResponseEntity.status(HttpStatus.OK).body(orderList);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
-    @GetMapping("/getOrderCanceled")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderCanceled () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCanceled());
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
 
-    }
-
-    @GetMapping("/getOrderPending")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderPending () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPending());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-    }
-
-    @GetMapping("getOrderPreparation")
-    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-    }
+//    @GetMapping("/getOrderReady")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderReady());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("/getOrderDelivered")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDelivered());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//    }
+//
+//    @GetMapping("/getOrderCanceled")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderCanceled () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderCanceled());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("/getOrderPending")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderPending () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPending());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//
+//    }
+//
+//    @GetMapping("getOrderPreparation")
+//    public ResponseEntity<List<OrderResponseDTO>> getOrderPreparation () {
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderPreparation());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//        }
+//    }
 
 }

@@ -95,6 +95,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             if (!dataOrder.getStatus().equals ("Preparacion"))
 
                 throw new Exception("El estado no puede ser diferente de preparación");
+
+            else if (!orderExist.getStatus().equals("Pendiente")) {
+                throw new Exception("No puedes cambiar a preparacion una orden que tenga estado diferente de pendiente");
+            }
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
 
@@ -114,8 +118,12 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             if (orderOptional.isEmpty()) {
                 throw new Exception("No existe el pedido");
             } Order orderExist = orderOptional.get();
-            if (!dataOrder.getStatus().equals("Listo")&& orderExist.getStatus().equals("Preparacion"))
+            if (!dataOrder.getStatus().equals("Listo")){
                 throw new Exception("El estado no puede ser diferente de Listo");
+            }
+            else if (!orderExist.getStatus().equals("Preparacion")){
+                throw new Exception("No puedes pasar a listo una orden que se encuentra en estado diferente a preparacion");
+            }
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
         }catch (Exception error) {
@@ -125,18 +133,26 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
     }
 
 
-        public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status,
-  int numberOfRecords) throws Exception {
-            try {
-                Pageable pagerList = PageRequest.of(0, numberOfRecords);
-                Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
-                return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
+    public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status, int numberOfRecords) throws Exception {
+        try {
+            Pageable pagerList = PageRequest.of(0, numberOfRecords);
+            Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
+            return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
 
-            } catch (Exception e) {
-                throw new Exception(e.getMessage());
-            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
+    }
 
+    public Page<OrderResponseDTO> getOrderForStatus(String status, int numberOfRecords) throws  Exception{
+        try{
+            Pageable pagerList = PageRequest.of(0,numberOfRecords);
+            Page<Order> orderPagerList = repositoryOrder.findByStatus(status, pagerList);
+            return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
 
     public OrderResponseDTO updateOrderCanceled (Long idOrder, Order dataOrder) throws Exception  {
         try {
@@ -195,24 +211,24 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
 
     //Preparación, Listo, Entregado, Cancelado, Pendiente
-    public List<OrderResponseDTO> getOrderReady () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Listo"));
-    }
-
-    public List<OrderResponseDTO> getOrderDelivered () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Entregado"));
-    }
-
-    public List<OrderResponseDTO> getOrderCanceled () {
-    return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Cancelado"));
-    }
-
-    public List<OrderResponseDTO> getOrderPending () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
-    }
-
-    public List<OrderResponseDTO> getOrderPreparation () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Preparacion"));
-    }
+//    public List<OrderResponseDTO> getOrderReady () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Listo"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderDelivered () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Entregado"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderCanceled () {
+//    return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Cancelado"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderPending () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderPreparation () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Preparacion"));
+//    }
 
 }
