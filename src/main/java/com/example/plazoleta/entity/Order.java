@@ -31,7 +31,11 @@ public class Order {
     @OneToOne(mappedBy = "order")
     private Claim claim;
 
+    @Column(name="reasonForCancellation")
+    private String reasonForCancellation;
+
     private double timeOrder;
+
 
     //constructor vacío
 
@@ -41,7 +45,8 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long idOrder, Character rol, Character approvalRol, String site, String status, List<OrderDetail> details, Claim claim, double timeOrder) {
+
+    public Order(Long idOrder, Character rol, Character approvalRol, String site, String status, List<OrderDetail> details, Claim claim, double timeOrder, String reasonForCancellation) {
         this.idOrder = idOrder;
         this.rol = rol;
         this.approvalRol = approvalRol;
@@ -49,12 +54,12 @@ public class Order {
         this.status = status;
         this.details = details;
         this.claim = claim;
+        this.reasonForCancellation = reasonForCancellation;
         this.timeOrder = timeOrder;
     }
 
 
     //getters y setters
-
 
     public Long getIdOrder() {
         return idOrder;
@@ -70,6 +75,14 @@ public class Order {
 
     public void setRol(Character rol) {
         this.rol = rol;
+    }
+
+    public Character getApprovalRol() {
+        return approvalRol;
+    }
+
+    public void setApprovalRol(Character approvalRol) {
+        this.approvalRol = approvalRol;
     }
 
     public String getSite() {
@@ -96,12 +109,20 @@ public class Order {
         this.details = details;
     }
 
-    public Character getApprovalRol() {
-        return approvalRol;
+    public Claim getClaim() {
+        return claim;
     }
 
-    public void setApprovalRol(Character approvalRol) {
-        this.approvalRol = approvalRol;
+    public void setClaim(Claim claim) {
+        this.claim = claim;
+    }
+
+    public String getReasonForCancellation() {
+        return reasonForCancellation;
+    }
+
+    public void setReasonForCancellation(String reasonForCancellation) {
+        this.reasonForCancellation = reasonForCancellation;
     }
 
     public Claim getClaim() {

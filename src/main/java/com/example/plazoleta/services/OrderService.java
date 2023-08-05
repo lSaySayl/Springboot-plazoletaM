@@ -138,28 +138,44 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         }
 
 
-    public OrderResponseDTO updateOrderCanceled (Long idOrder, Order dataOrder) throws Exception  {
+    public OrderResponseDTO updateOrderCanceled(Long idOrder, Order dataOrder) throws Exception {
         try {
-            if (dataOrder.getRol() != ('A')) {
-                throw new Exception("El rol no esta autorizado para actualizar el estado del pedido");
+            // Verificar si el rol es autorizado para actualizar el estado del pedido
+            if (!dataOrder.getRol().equals('A')) {
+                throw new Exception("El rol no está autorizado para actualizar el estado del pedido");
             }
+
+            // Buscar el pedido por ID en la base de datos
             Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
             if (orderOptional.isEmpty()) {
-                throw new Exception("No existe un pedido, por lo tanto no se puede actualizar el estado");
+                throw new Exception("No existe un pedido con el ID proporcionado");
             }
 
             Order orderExist = orderOptional.get();
+            String status = orderExist.getStatus();
+            orderExist.setReasonForCancellation(dataOrder.getReasonForCancellation());
 
-            if (orderExist.getStatus() == ("Preparacion") || dataOrder.getStatus() == ("Listo") || dataOrder.getStatus() == ("Entregado")) {
-                throw new Exception("El pedido no se puede cancelar en esta instancia");
+            if (orderExist.getReasonForCancellation() == null) {
+                throw new Exception("Debe ingresar una razón para cancelar el pedido");
             }
+
+            // Verificar si el pedido está en estado "Pendiente" para permitir la cancelación
+
+            if (!dataOrder.getStatus().equals("Cancelado")) {
+                throw new Exception("Solo puedes actualizar este pedido a 'Cancelado'");
+
+            }
+
+            if (!status.equals("Pendiente")) {
+                throw new Exception("Lo sentimos, tu pedido ya está "  + status +  " y no puede ser cancelado");
+            }
+
 
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
 
         } catch (Exception error) {
             throw new Exception(error.getMessage());
-
         }
     }
 
@@ -179,7 +195,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         Order orderExist = orderOptional.get();
 
         if (orderExist.getStatus() != ("Listo") && !dataOrder.getStatus().equals("Entregado")) {
-            throw new Exception("El pedido no se puede entregar en esta instancia");
+            throw new Exception("En este punto solo puedes actualizar el estado a entregado");
         }
 
 
