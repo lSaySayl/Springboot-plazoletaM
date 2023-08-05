@@ -34,6 +34,9 @@ public class Order {
     @Column(name="reasonForCancellation")
     private String reasonForCancellation;
 
+    private double timeOrder;
+
+
     //constructor vacío
 
     public Order() {
@@ -42,7 +45,8 @@ public class Order {
 
     //constructor lleno
 
-    public Order(Long idOrder, Character rol, Character approvalRol, String site, String status, List<OrderDetail> details, Claim claim, String reasonForCancellation) {
+
+    public Order(Long idOrder, Character rol, Character approvalRol, String site, String status, List<OrderDetail> details, Claim claim, double timeOrder, String reasonForCancellation) {
         this.idOrder = idOrder;
         this.rol = rol;
         this.approvalRol = approvalRol;
@@ -51,6 +55,7 @@ public class Order {
         this.details = details;
         this.claim = claim;
         this.reasonForCancellation = reasonForCancellation;
+        this.timeOrder = timeOrder;
     }
 
 
@@ -118,5 +123,21 @@ public class Order {
 
     public void setReasonForCancellation(String reasonForCancellation) {
         this.reasonForCancellation = reasonForCancellation;
+    }
+
+    public Claim getClaim() {
+        return claim;
+    }
+
+    public void setClaim(Claim claim) {
+        this.claim = claim;
+    }
+
+    public double getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(double timeOrder) {
+        this.timeOrder = timeOrder;
     }
 }
