@@ -10,6 +10,11 @@ import com.example.plazoleta.dto.response.OrderResponseDTO;
 import com.example.plazoleta.entity.Menu;
 import com.example.plazoleta.entity.Order;
 import com.example.plazoleta.services.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,10 +26,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("restaurantAPI/order")
+@Tag(name = "Order Management", description = "Endpoints related to order management")
 public class OrderController {
     @Autowired
     OrderService orderService;
 
+
+    @Operation(summary = "Create an order")
+    @ApiResponse(responseCode = "201", description = "Order created successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody Order dataOrder) {
         try{
@@ -35,6 +45,10 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
+
+    @Operation(summary = "Update an order by ID")
+    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PutMapping("/updateOrder/{id}")
     public ResponseEntity<OrderDTO> updatedOrder(@PathVariable Long id, @RequestBody Order order){
         try{
@@ -45,6 +59,10 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
+
+    @Operation(summary = "Update an order to set it as ready")
+    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @PutMapping("/updateOrderReady/{id}")
     public ResponseEntity<OrderDTO> updateOrderReady(@PathVariable long id, @RequestBody Order order){
       try {
@@ -75,6 +93,9 @@ public class OrderController {
         }
     }
 
+    @Operation(summary = "Update an order to set it as canceled")
+    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
     @PutMapping("/updateOrderCanceled/{id}")
     public ResponseEntity<OrderDTO> updateOrderCanceled(@PathVariable Long id, @RequestBody Order order){
@@ -88,6 +109,10 @@ public class OrderController {
     }
 
 
+    @Operation(summary = "Update an order to set it as delivered")
+    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
+
     @PutMapping("/updateOrderDelivered/{id}")
     public ResponseEntity<OrderDTO> updateOrderDelivered (@PathVariable Long id, @RequestBody Order order){
         try{
@@ -100,6 +125,9 @@ public class OrderController {
     }
 
 
+    @Operation(summary = "Get orders that are ready")
+    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
     @GetMapping("/getOrderReady")
     public ResponseEntity<List<OrderResponseDTO>> getOrderReady () {
@@ -111,6 +139,7 @@ public class OrderController {
         }
 
     }
+
 
     @GetMapping("/getOrderDelivered")
     public ResponseEntity<List<OrderResponseDTO>> getOrderDelivered () {
