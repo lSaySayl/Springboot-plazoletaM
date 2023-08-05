@@ -210,7 +210,9 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         Order orderExist = orderOptional.get();
 
-        if (orderExist.getStatus() != ("Listo") && !dataOrder.getStatus().equals("Entregado")) {
+        if (!orderExist.getStatus().equals("Listo")) {
+            throw new Exception("No puedes pasar a Entregado una orden que esta en estado diferente a Listo");
+        } else if (!dataOrder.getStatus().equals("Entregado")) {
             throw new Exception("En este punto solo puedes actualizar el estado a entregado");
         }
 
