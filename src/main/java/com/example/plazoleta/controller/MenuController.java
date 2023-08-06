@@ -66,9 +66,11 @@ public class MenuController {
 
 
 
+
     @Operation(summary = "Get paginated and filtered menus")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MenuResponseDTO.class)))
     @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
+
     @GetMapping
     public ResponseEntity <List<MenuResponseDTO>> getPaginatedAndFilterMenu (
             @RequestParam () String category,
@@ -86,6 +88,44 @@ public class MenuController {
 
         } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @GetMapping("getForCategory")
+    public ResponseEntity <List<MenuResponseDTO>>getMenusForCategory(
+            @RequestParam () String category,
+            @RequestParam () int numberOfRecords
+    ) {
+        try {
+            // Llamamos al servicio para obtener la respuesta paginada
+            Page<MenuResponseDTO> menuPages = menuService.getMenusForCategory(category, numberOfRecords);
+
+            // Creamos una instancia de PlatoRespuestaPaginadaDTO y le pasamos la lista de platos obtenida del Page
+            List<MenuResponseDTO> listMenus = menuPages.getContent();
+
+            return ResponseEntity.status(HttpStatus.OK).body(listMenus);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @GetMapping("getForSite")
+    public ResponseEntity <List<MenuResponseDTO>>getMenusForSite(
+            @RequestParam () String site,
+            @RequestParam () int numberOfRecords
+    ) {
+        try {
+            // Llamamos al servicio para obtener la respuesta paginada
+            Page<MenuResponseDTO> menuPages = menuService.getMenusForSite(site, numberOfRecords);
+
+            // Creamos una instancia de PlatoRespuestaPaginadaDTO y le pasamos la lista de platos obtenida del Page
+            List<MenuResponseDTO> listMenus = menuPages.getContent();
+
+            return ResponseEntity.status(HttpStatus.OK).body(listMenus);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 }
