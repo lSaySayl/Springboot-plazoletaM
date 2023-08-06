@@ -18,6 +18,7 @@ public interface OrderMaps {
             @Mapping(source = "idOrder", target = "idOrder"),
             @Mapping(source = "site", target = "site"),
             @Mapping(source="status",target = "status"),
+            @Mapping(source = "timeOrder", target = "timeOrder"),
             @Mapping(target = "details", qualifiedByName = "toListOrderDetail")
     })
     public OrderResponseDTO toOrderResponseDto(Order order);

@@ -5,6 +5,10 @@ import com.example.plazoleta.dto.general.MenuDTO;
 import com.example.plazoleta.dto.response.MenuResponseDTO;
 import com.example.plazoleta.entity.Menu;
 import com.example.plazoleta.services.MenuService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,7 +23,10 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
-    @PostMapping
+    @Operation(summary = "Create a menu")
+    @ApiResponse(responseCode = "201", description = "Menu created successfully", content = @Content(schema = @Schema(implementation = MenuDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
+    @PostMapping("/createMenu")
     public ResponseEntity<MenuDTO> createMenu(@RequestBody Menu dataMenu) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(menuService.createMenu(dataMenu));
@@ -29,6 +36,9 @@ public class MenuController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(menuErrorDTO);
         }
     }
+    @Operation(summary = "Update a menu by ID")
+    @ApiResponse(responseCode = "200", description = "Menu updated successfully", content = @Content(schema = @Schema(implementation = MenuDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
     @PutMapping("/updateMenu/{id}")
     public ResponseEntity<MenuDTO> updatedMenu(@PathVariable Long id, @RequestBody Menu menu){
         try{
@@ -40,6 +50,9 @@ public class MenuController {
         }
     }
 
+    @Operation(summary = "Update menu status by ID")
+    @ApiResponse(responseCode = "200", description = "Menu status updated successfully", content = @Content(schema = @Schema(implementation = MenuDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
     @PutMapping("updateStatus/{id}")
     public  ResponseEntity<MenuDTO> updateMenuStatus(@PathVariable Long id, @RequestBody Menu menu){
         try {
@@ -50,6 +63,13 @@ public class MenuController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(menuErrorDTO);
         }
     }
+
+
+
+
+    @Operation(summary = "Get paginated and filtered menus")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MenuResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
 
     @GetMapping
     public ResponseEntity <List<MenuResponseDTO>> getPaginatedAndFilterMenu (

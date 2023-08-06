@@ -67,11 +67,14 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         if (OrderValidation.validateRequired(dataOrder)) {
             throw new Exception("Campos obligatorios vacios, verifique nuevamente");
         }
+        double timePreparationOrder = 0;
         for (OrderDetail detail : dataOrder.getDetails()) {
             Long idOrder = detail.getMenu().getId();
             Optional<Menu> menuOptional = repositoryMenu.findById(idOrder);
             detail.getMenu().setName(menuOptional.get().getName());
+            timePreparationOrder += menuOptional.get().getPreparationTime()*detail.getQuantity();
         }
+        dataOrder.setTimeOrder(timePreparationOrder);
         return orderMaps.toOrderResponseDto(repositoryOrder.save(dataOrder));
 
     } catch (Exception error) {
@@ -92,6 +95,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             if (!dataOrder.getStatus().equals ("Preparacion"))
 
                 throw new Exception("El estado no puede ser diferente de preparación");
+
+            else if (!orderExist.getStatus().equals("Pendiente")) {
+                throw new Exception("No puedes cambiar a preparacion una orden que tenga estado diferente de pendiente");
+            }
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
 
@@ -111,8 +118,12 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             if (orderOptional.isEmpty()) {
                 throw new Exception("No existe el pedido");
             } Order orderExist = orderOptional.get();
-            if (!dataOrder.getStatus().equals("Listo")&& orderExist.getStatus().equals("Preparacion"))
+            if (!dataOrder.getStatus().equals("Listo")){
                 throw new Exception("El estado no puede ser diferente de Listo");
+            }
+            else if (!orderExist.getStatus().equals("Preparacion")){
+                throw new Exception("No puedes pasar a listo una orden que se encuentra en estado diferente a preparacion");
+            }
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
         }catch (Exception error) {
@@ -122,40 +133,58 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
     }
 
 
-        public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status,
-  int numberOfRecords) throws Exception {
-            try {
-                Pageable pagerList = PageRequest.of(0, numberOfRecords);
-                Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
-                return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
-
-            } catch (Exception e) {
-                throw new Exception(e.getMessage());
-            }
-        }
-
-    public OrderResponseDTO updateOrderCanceled (Long idOrder, Order dataOrder) throws Exception  {
+    public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status, int numberOfRecords) throws Exception {
         try {
-            if (dataOrder.getRol() != ('A')) {
-                throw new Exception("El rol no esta autorizado para actualizar el estado del pedido");
+            Pageable pagerList = PageRequest.of(0, numberOfRecords);
+            Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
+            return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
+
+    public OrderResponseDTO updateOrderCanceled(Long idOrder, Order dataOrder) throws Exception {
+
+        try {
+            // Verificar si el rol es autorizado para actualizar el estado del pedido
+            if (!dataOrder.getRol().equals('A')) {
+                throw new Exception("El rol no está autorizado para actualizar el estado del pedido");
             }
+
+            // Buscar el pedido por ID en la base de datos
             Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
             if (orderOptional.isEmpty()) {
-                throw new Exception("No existe un pedido, por lo tanto no se puede actualizar el estado");
+                throw new Exception("No existe un pedido con el ID proporcionado");
             }
 
             Order orderExist = orderOptional.get();
+            String status = orderExist.getStatus();
+            orderExist.setReasonForCancellation(dataOrder.getReasonForCancellation());
 
-            if (orderExist.getStatus() == ("Preparacion") || dataOrder.getStatus() == ("Listo") || dataOrder.getStatus() == ("Entregado")) {
-                throw new Exception("El pedido no se puede cancelar en esta instancia");
+            if (orderExist.getReasonForCancellation() == null) {
+                throw new Exception("Debe ingresar una razón para cancelar el pedido");
             }
+
+            // Verificar si el pedido está en estado "Pendiente" para permitir la cancelación
+
+            if (!dataOrder.getStatus().equals("Cancelado")) {
+                throw new Exception("Solo puedes actualizar este pedido a 'Cancelado'");
+
+            }
+
+            if (!status.equals("Pendiente")) {
+                throw new Exception("Lo sentimos, tu pedido ya está "  + status +  " y no puede ser cancelado");
+            }
+
 
             orderExist.setStatus(dataOrder.getStatus());
             return orderMaps.toOrderResponseDto(repositoryOrder.save(orderExist));
 
         } catch (Exception error) {
             throw new Exception(error.getMessage());
-
         }
     }
 
@@ -174,8 +203,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         Order orderExist = orderOptional.get();
 
-        if (orderExist.getStatus() != ("Listo") && !dataOrder.getStatus().equals("Entregado")) {
-            throw new Exception("El pedido no se puede entregar en esta instancia");
+        if (!orderExist.getStatus().equals("Listo")) {
+            throw new Exception("No puedes pasar a Entregado una orden que esta en estado diferente a Listo");
+        } else if (!dataOrder.getStatus().equals("Entregado")) {
+            throw new Exception("En este punto solo puedes actualizar el estado a entregado");
         }
 
 
@@ -191,24 +222,24 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
 
     //Preparación, Listo, Entregado, Cancelado, Pendiente
-    public List<OrderResponseDTO> getOrderReady () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Listo"));
-    }
-
-    public List<OrderResponseDTO> getOrderDelivered () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Entregado"));
-    }
-
-    public List<OrderResponseDTO> getOrderCanceled () {
-    return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Cancelado"));
-    }
-
-    public List<OrderResponseDTO> getOrderPending () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
-    }
-
-    public List<OrderResponseDTO> getOrderPreparation () {
-        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Preparacion"));
-    }
+//    public List<OrderResponseDTO> getOrderReady () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Listo"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderDelivered () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Entregado"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderCanceled () {
+//    return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Cancelado"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderPending () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Pendiente"));
+//    }
+//
+//    public List<OrderResponseDTO> getOrderPreparation () {
+//        return orderMaps.toOrderResponseDtos(repositoryOrder.findByStatus("Preparacion"));
+//    }
 
 }
