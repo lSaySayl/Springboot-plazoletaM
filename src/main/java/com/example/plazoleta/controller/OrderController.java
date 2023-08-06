@@ -125,7 +125,6 @@ public class OrderController {
         }
     }
 
-    //<<<<<<< HEAD
     @GetMapping("/getForStatus")
     public ResponseEntity<List<OrderResponseDTO>> getOrderForStatus(@RequestParam() String status, @RequestParam() int numberOfRecords) {
         try {
@@ -137,7 +136,7 @@ public class OrderController {
         }
     }
 
-//=======
+
 //
 //    @Operation(summary = "Get orders that are ready")
 //    @ApiResponse(responseCode = "200", description = "Order updated successfully", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
