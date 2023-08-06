@@ -144,17 +144,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
         }
     }
 
-    public Page<OrderResponseDTO> getOrderForStatus(String status, int numberOfRecords) throws  Exception{
-        try{
-            Pageable pagerList = PageRequest.of(0,numberOfRecords);
-            Page<Order> orderPagerList = repositoryOrder.findByStatus(status, pagerList);
-            return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
+
 
     public OrderResponseDTO updateOrderCanceled(Long idOrder, Order dataOrder) throws Exception {
+
         try {
             // Verificar si el rol es autorizado para actualizar el estado del pedido
             if (!dataOrder.getRol().equals('A')) {
