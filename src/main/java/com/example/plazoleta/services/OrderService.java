@@ -134,7 +134,6 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             }
         }
 
-
     public OrderResponseDTO updateOrderCanceled (Long idOrder, Order dataOrder) throws Exception  {
         try {
             if (dataOrder.getRol() != ('A')) {
