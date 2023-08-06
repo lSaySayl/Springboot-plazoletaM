@@ -70,8 +70,9 @@ class OrderServiceTest {
         String site = "Medellin";
         String status = "Pendiente";
         Claim claim = new Claim();
-        double timePreparation = 10.0;
-        order = new Order(id,rol, aprovalRol,site,status,orderDetails,claim,timePreparation);
+        double timeOrder = 10.0;
+        String reasonForCancellation = "Ejemplo de cancelacion";
+        order = new Order(id,rol, aprovalRol,site,status,orderDetails,claim,timeOrder, reasonForCancellation);
 
 
     }
@@ -148,6 +149,31 @@ class OrderServiceTest {
     }
 
     @Test
+    void updateOrderReadyWrongRol() throws Exception{
+        assertThrows(Exception.class,()->orderService.updateOrderReady(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderReadyIdNotExist() throws Exception{
+        order.setRol('A');
+        Optional<Order> optionalEmpty = Optional.empty();
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(optionalEmpty);
+        assertThrows(Exception.class, ()->orderService.updateOrderReady(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderReadyDataEnteredWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        assertThrows(Exception.class, ()-> orderService.updateOrderReady(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderReadyDataExistWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        order.setStatus("Listo");
+        assertThrows(Exception.class, ()-> orderService.updateOrderReady(order.getIdOrder(), order));
+    }
+
+    @Test
     void getOrderForStatusAndSite() {
     }
 
@@ -170,10 +196,88 @@ class OrderServiceTest {
     }
 
     @Test
-    void updateOrderCanceled() {
+    void updateOrderCancelled() throws Exception{
+        order.setRol('A');
+        order.setStatus("Cancelado");
+
+        Order orderExist = new Order();
+        orderExist.setStatus("Pendiente");
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(orderExist));
+        when(repositoryOrder.save(order)).thenReturn(order);
+        OrderResponseDTO responseDTO = orderService.updateOrderCanceled(order.getIdOrder(), order);
+        assertEquals(responseDTO,orderResponseDTO);
+    }
+    @Test
+    void updateOrderCancelledWrongRol() throws Exception{
+        assertThrows(Exception.class,()->orderService.updateOrderCanceled(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderCancelledIdNotExist() throws Exception{
+        order.setRol('A');
+        Optional<Order> optionalEmpty = Optional.empty();
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(optionalEmpty);
+        assertThrows(Exception.class, ()->orderService.updateOrderCanceled(order.getIdOrder(), order));
     }
 
     @Test
-    void updateOrderDelivered() {
+    void updateOrderCancelledMessageNull() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        order.setReasonForCancellation(null);
+        assertThrows(Exception.class, ()->orderService.updateOrderCanceled(order.getIdOrder(), order));
     }
+    @Test
+    void updateOrderCancelledDataEnteredWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        assertThrows(Exception.class, ()-> orderService.updateOrderCanceled(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderCancelledDataExistWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        order.setStatus("Cancelado");
+        assertThrows(Exception.class, ()-> orderService.updateOrderCanceled(order.getIdOrder(), order));
+    }
+
+
+    @Test
+    void updateOrderDelivered() throws Exception{
+        order.setRol('A');
+        order.setStatus("Entregado");
+
+        Order orderExist = new Order();
+        orderExist.setStatus("Listo");
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(orderExist));
+        when(repositoryOrder.save(order)).thenReturn(order);
+        OrderResponseDTO responseDTO = orderService.updateOrderDelivered(order.getIdOrder(), order);
+        assertEquals(responseDTO,orderResponseDTO);
+    }
+    @Test
+    void updateOrderDeliveredWrongRol() throws Exception{
+        assertThrows(Exception.class,()->orderService.updateOrderDelivered(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderDeliveredIdNotExist() throws Exception{
+        order.setRol('A');
+        Optional<Order> optionalEmpty = Optional.empty();
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(optionalEmpty);
+        assertThrows(Exception.class, ()->orderService.updateOrderDelivered(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderDeliveredDataExistWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        assertThrows(Exception.class, ()-> orderService.updateOrderDelivered(order.getIdOrder(), order));
+    }
+    @Test
+    void updateOrderDeliveredDataEnteredWrong() throws Exception{
+        order.setRol('A');
+        when(repositoryOrder.findById(order.getIdOrder())).thenReturn(Optional.of(order));
+        order.setStatus("Listo");
+        assertThrows(Exception.class, ()-> orderService.updateOrderDelivered(order.getIdOrder(), order));
+    }
+
+
+
 }
