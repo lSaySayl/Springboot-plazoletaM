@@ -133,10 +133,10 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
     }
 
 
-    public Page<OrderResponseDTO> getOrderForStatusAndSite (String side, String status, int numberOfRecords) throws Exception {
+    public Page<OrderResponseDTO> getOrderForStatusAndSite (String site, String status, int numberOfRecords) throws Exception {
         try {
             Pageable pagerList = PageRequest.of(0, numberOfRecords);
-            Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(side, status, pagerList);
+            Page<Order> orderPagerList = repositoryOrder.findByStatusAndSite(status, site, pagerList);
             return orderPagerList.map(order -> orderMaps.toOrderResponseDto(order));
 
         } catch (Exception e) {
