@@ -18,5 +18,10 @@ public class OrderValidation {
         return  order.getSite() == null || order.getSite().isEmpty() ||
                 order.getDetails() == null || order.getDetails().isEmpty();
     }
+    public  void validarLetra(Character letra) throws Exception {
+        if (!letra.equals('A') && !letra.equals('U')) {
+            throw new Exception("No tienes permiso para modificar el pedido");
+        }
+    }
 }
 
