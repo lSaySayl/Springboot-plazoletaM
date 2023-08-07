@@ -150,9 +150,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
 
         try {
             // Verificar si el rol es autorizado para actualizar el estado del pedido
-            if (!dataOrder.getRol().equals('A')) {
-                throw new Exception("El rol no está autorizado para actualizar el estado del pedido");
-            }
+            orderValidation.validarLetra(dataOrder.getRol());
 
             // Buscar el pedido por ID en la base de datos
             Optional<Order> orderOptional = repositoryOrder.findById(idOrder);
