@@ -115,6 +115,41 @@ class MenuServiceTest {
         int numberOfRecords = 0;
         assertThrows(Exception.class,()->menuService.getMenusForCategoryAndSite(menu.getCategory(), menu.getSite(), numberOfRecords));
     }
+    @Test
+    void getMenusForCategory() throws Exception{
+        int numberOfRecords = 1;
+        Pageable pagerList = PageRequest.of(0,numberOfRecords);
+        Page<Menu> menuPage = new PageImpl<>(List.of(menu));
+        when(repositoryMenu.findByCategory(menu.getCategory(),pagerList)).thenReturn(menuPage);
+        when(menuMaps.toMenuResponseDto(menu)).thenReturn(menuResponseDTO);
+        Page<MenuResponseDTO> result = menuService.getMenusForCategory(menu.getCategory(),numberOfRecords);
+        assertNotNull(result);
+        assertEquals(1,result.getTotalElements());
+        assertEquals(menuResponseDTO,result.getContent().get(0));
+    }
+    @Test
+    void getMenusForCategoryWithError() throws Exception{
+        int numberOfRecords = 0;
+        assertThrows(Exception.class,()->menuService.getMenusForCategory(menu.getCategory(),numberOfRecords));
+    }
+
+    @Test
+    void getMenusForSite() throws Exception{
+        int numberOfRecords = 1;
+        Pageable pagerList = PageRequest.of(0,numberOfRecords);
+        Page<Menu> menuPage = new PageImpl<>(List.of(menu));
+        when(repositoryMenu.findBySite(menu.getSite(),pagerList)).thenReturn(menuPage);
+        when(menuMaps.toMenuResponseDto(menu)).thenReturn(menuResponseDTO);
+        Page<MenuResponseDTO> result = menuService.getMenusForSite(menu.getSite(),numberOfRecords);
+        assertNotNull(result);
+        assertEquals(1,result.getTotalElements());
+        assertEquals(menuResponseDTO,result.getContent().get(0));
+    }
+    @Test
+    void getMenusForSiteWithError() throws Exception{
+        int numberOfRecords = 0;
+        assertThrows(Exception.class,()->menuService.getMenusForSite(menu.getSite(),numberOfRecords));
+    }
 
     @Test
     void updateMenu() throws Exception{

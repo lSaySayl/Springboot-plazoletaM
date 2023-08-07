@@ -174,7 +174,20 @@ class OrderServiceTest {
     }
 
     @Test
-    void getOrderForStatusAndSite() {
+    void getOrderForStatusAndSite() throws Exception{
+        int numberOfRecords = 1;
+        Pageable pagerList = PageRequest.of(0,numberOfRecords);
+        Page<Order> orderPage = new PageImpl<>(List.of(order));
+        when(repositoryOrder.findByStatusAndSite(order.getStatus(),order.getSite(),pagerList)).thenReturn(orderPage);
+        when(orderMaps.toOrderResponseDto(order)).thenReturn(orderResponseDTO);
+        Page<OrderResponseDTO> result = orderService.getOrderForStatusAndSite(order.getSite(), order.getStatus(), numberOfRecords);
+        assertNotNull(result);
+        assertEquals(1,result.getTotalElements());
+    }
+    @Test
+    void getOrderForStatusAndSiteWithError() throws Exception{
+        int numberOfRecords = 0;
+        assertThrows(Exception.class, ()->orderService.getOrderForStatusAndSite(order.getSite(),order.getStatus(),numberOfRecords));
     }
 
     @Test
