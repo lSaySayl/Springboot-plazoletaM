@@ -37,7 +37,7 @@ public class ClaimService {
     }
 
     public List<ClaimResponseDTO> getClaimsInStateGenerated(){
-        return claimMaps.toClaimResponseDTOs(repositoryClaim.findByStatus("Generated"));
+        return claimMaps.toClaimResponseDTOs(repositoryClaim.findByStatus("Generada"));
     }
 
     public ClaimResponseDTO updateStatusClaim(Long id, Claim claim) throws Exception{
