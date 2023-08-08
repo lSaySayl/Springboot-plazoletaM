@@ -76,6 +76,31 @@ class MenuServiceTest {
         menu.setRol('B');
         assertThrows(Exception.class, ()->menuService.createMenu(menu));
     }
+    @Test
+    void createMenuWithoutSite() throws Exception{
+        when(menuValidation.validatePrice(anyInt())).thenReturn(false);
+        menu.setSite(null);
+        assertThrows(Exception.class, ()-> menuService.createMenu(menu));
+    }
+    @Test
+    void createMenuWithoutPrice() throws Exception{
+        when(menuValidation.validatePrice(anyInt())).thenReturn(false);
+        menu.setPrice(null);
+        assertThrows(Exception.class, ()-> menuService.createMenu(menu));
+    }
+    @Test
+    void createMenuWithoutName() throws Exception{
+        when(menuValidation.validatePrice(anyInt())).thenReturn(false);
+        menu.setName(null);
+        assertThrows(Exception.class, ()-> menuService.createMenu(menu));
+    }
+    @Test
+    void createMenuWithoutCategory() throws Exception{
+        when(menuValidation.validatePrice(anyInt())).thenReturn(false);
+        menu.setCategory(null);
+        assertThrows(Exception.class, ()-> menuService.createMenu(menu));
+    }
+
 
     @Test
     void updateStatus() throws Exception{

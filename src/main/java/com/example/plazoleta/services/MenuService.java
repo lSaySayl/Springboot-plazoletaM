@@ -27,8 +27,21 @@ public class MenuService {
         try{
             if(!dataMenu.getRol().equals('A')){
                 throw new Exception("No tiene permisos para crear un plato");
-            }else if (validate.validatePrice(dataMenu.getPrice())){
+            }
+            if (validate.validatePrice(dataMenu.getPrice())){
                 throw new Exception("El plato no puede tener un precio negativo");
+            }
+            if (dataMenu.getSite() == null || dataMenu.getSite().isEmpty()) {
+                throw new Exception("El campo 'site' es obligatorio");
+            }
+            if (dataMenu.getPrice() == null) {
+                throw new Exception("El campo 'precio' es obligatorio");
+            }
+            if (dataMenu.getName() == null || dataMenu.getName().isEmpty()) {
+                throw new Exception("El campo 'nombre' es obligatorio");
+            }
+            if (dataMenu.getCategory() == null || dataMenu.getCategory().isEmpty()) {
+                throw new Exception("El campo 'categoria' es obligatorio");
             }
             return menuMap.toMenuResponseDto(repositoryMenu.save(dataMenu));
 

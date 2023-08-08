@@ -169,7 +169,7 @@ public OrderResponseDTO createOrder (Order dataOrder) throws Exception {
             // Verificar si el pedido está en estado "Pendiente" para permitir la cancelación
 
             if (!dataOrder.getStatus().equals("Cancelado")) {
-                throw new Exception("Solo puedes actualizar este pedido a 'Cancelado'");
+                throw new Exception("No es posible actualizar este pedido");
 
             }
 

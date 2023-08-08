@@ -90,6 +90,10 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    @Operation(summary = "Get menus by category",
+            description = "This endpoint retrieves menus based on their category.")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MenuResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
 
     @GetMapping("getForCategory")
     public ResponseEntity <List<MenuResponseDTO>>getMenusForCategory(
@@ -110,6 +114,10 @@ public class MenuController {
         }
     }
 
+    @Operation(summary = "Get menus by site",
+            description = "This endpoint retrieves menus based on their associated site.")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = MenuResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = MenuErrorDTO.class)))
     @GetMapping("getForSite")
     public ResponseEntity <List<MenuResponseDTO>>getMenusForSite(
             @RequestParam () String site,

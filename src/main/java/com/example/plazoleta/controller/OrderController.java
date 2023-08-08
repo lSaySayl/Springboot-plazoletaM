@@ -74,6 +74,10 @@ public class OrderController {
         }
     }
 
+    @Operation(summary = "Get paginated and filtered orders",
+            description = "This endpoint retrieves paginated and filtered orders based on site and status.")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
     @GetMapping
     public ResponseEntity<List<OrderResponseDTO>> getPaginatedAndFilterOrder(
             @RequestParam() String site,
@@ -124,6 +128,10 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(orderErrorDTO);
         }
     }
+    @Operation(summary = "Get orders by status",
+            description = "This endpoint retrieves orders based on their status.")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = OrderResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = OrderErrorDTO.class)))
 
     @GetMapping("/getForStatus")
     public ResponseEntity<List<OrderResponseDTO>> getOrderForStatus(@RequestParam() String status, @RequestParam() int numberOfRecords) {
